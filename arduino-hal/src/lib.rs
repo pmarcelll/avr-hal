@@ -16,6 +16,7 @@
 #![cfg_attr(feature = "trinket-pro", doc = "**Trinket Pro**.")]
 #![cfg_attr(feature = "trinket", doc = "**Trinket**.")]
 #![cfg_attr(feature = "nano168", doc = "**Nano clone (ATmega168)**.")]
+#![cfg_attr(feature = "atmega8-custom", doc = "**ATmega8 Custom**.")]
 //! This means that only items which are available for this board are visible.  If you are using a
 //! different board, try building the documentation locally with
 //!
@@ -62,6 +63,7 @@ compile_error!(
     * trinket-pro
     * trinket
     * nano168
+    * atmega8-custom
     "
 );
 
@@ -263,6 +265,18 @@ macro_rules! default_serial {
     ($p:expr, $pins:expr, $baud:expr) => {
         $crate::Usart::new(
             $p.USART0,
+            $pins.d0,
+            $pins.d1.into_output(),
+            $crate::hal::usart::BaudrateExt::into_baudrate($baud),
+        )
+    };
+}
+#[cfg(any(feature = "atmega8-custom"))]
+#[macro_export]
+macro_rules! default_serial {
+    ($p:expr, $pins:expr, $baud:expr) => {
+        $crate::Usart::new(
+            $p.USART,
             $pins.d0,
             $pins.d1.into_output(),
             $crate::hal::usart::BaudrateExt::into_baudrate($baud),
