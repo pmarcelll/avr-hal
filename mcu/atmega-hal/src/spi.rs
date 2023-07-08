@@ -97,6 +97,15 @@ avr_hal_generic::impl_spi! {
 }
 
 #[cfg(any(feature = "atmega8"))]
+pub type Spi = avr_hal_generic::spi::Spi<
+    crate::Atmega,
+    crate::pac::SPI,
+    port::PB5,
+    port::PB3,
+    port::PB4,
+    port::PB2,
+>;
+#[cfg(any(feature = "atmega8"))]
 avr_hal_generic::impl_spi! {
     hal: crate::Atmega,
     peripheral: crate::pac::SPI,
